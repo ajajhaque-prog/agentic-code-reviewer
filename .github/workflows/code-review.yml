@@ -19,7 +19,7 @@ jobs:
         # IMPORTANT: Replace <YOUR_API_URL> with your actual Render URL later
         run: |
           echo "Sending code to API..."
-          curl -X POST -F "zip_file=@project_code.zip" <YOUR_API_URL>/api/review-zip -o review_report.pdf
+          curl -X POST -F "zip_file=@project_code.zip" https://agentic-code-reviewer.onrender.com/api/review-zip -o review_report.pdf
 
       - name: Upload Report
         if: success()
