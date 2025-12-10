@@ -1,0 +1,29 @@
+name: Agentic Code Review
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Zip Codebase
+        run: zip -r project_code.zip . -x "*.git*"
+
+      - name: Send to Reviewer API
+        # IMPORTANT: Replace <YOUR_API_URL> with your actual Render URL later
+        run: |
+          echo "Sending code to API..."
+          curl -X POST -F "zip_file=@project_code.zip" <YOUR_API_URL>/api/review-zip -o review_report.pdf
+
+      - name: Upload Report
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: review-report
+          path: review_report.pdf
