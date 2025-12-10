@@ -1,0 +1,21 @@
+image: python:3.9
+
+pipelines:
+  default:
+    - step:
+        name: Agentic Code Review
+        script:
+          - apt-get update && apt-get install -y zip curl
+          # 1. Zip the codebase (excluding git internals)
+          - zip -r project_code.zip . -x "*.git*"
+          
+          # 2. Call the Reviewer API
+          # Replace <YOUR_API_URL> with your actual deployed server URL (e.g., https://my-reviewer.render.com)
+          - echo "Sending code for review..."
+          - curl -X POST -F "zip_file=@project_code.zip" <YOUR_API_URL>/api/review-zip -o review_report.pdf
+          
+          # 3. Check if report was generated
+          - if [ -f review_report.pdf ]; then echo "Review Generated Successfully!"; else echo "Review Failed"; exit 1; fi
+        
+        artifacts:
+          - review_report.pdf
