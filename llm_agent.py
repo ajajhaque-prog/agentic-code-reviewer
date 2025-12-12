@@ -120,8 +120,9 @@ def generate_llm_review(source_code: str, filename: str, language: str) -> Dict[
                 return _fallback_result(filename, language, f"Model {GEMINI_MODEL} not found (404). Check .env")
 
             else:
-                logger.error(f"API Error {resp.status_code}: {resp.text}")
-                return _fallback_result(filename, language, f"API Error {resp.status_code}")
+                error_details = resp.text[:500] # Capture first 500 chars of error
+                logger.error(f"API Error {resp.status_code}: {error_details}")
+                return _fallback_result(filename, language, f"API Error {resp.status_code}: {error_details}")
 
         except Exception as e:
             logger.error(f"Network Exception: {e}")
