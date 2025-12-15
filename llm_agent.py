@@ -13,7 +13,14 @@ logger = get_logger("LLMAgent")
 
 # Configuration
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash") # Default to what we found works or standard
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+
+# Debug Logging for Render
+if len(GEMINI_API_KEY) > 5:
+    logger.info(f"Loaded API Key: {GEMINI_API_KEY[:5]}... (Length: {len(GEMINI_API_KEY)})")
+    logger.info(f"Loaded Model: {GEMINI_MODEL}")
+else:
+    logger.error(f"CRITICAL: API Key is missing or too short! Value: '{GEMINI_API_KEY}'")
 API_URL_TEMPLATE = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={key}"
 
 # Strict JSON Schema Prompt
